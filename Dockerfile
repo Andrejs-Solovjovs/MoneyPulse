@@ -2,6 +2,14 @@ FROM nginx:alpine
 
 RUN rm -rf /usr/share/nginx/html/*
 
-RUN printf '<!doctype html><html><head><title>TEST</title></head><body style="font-family:Arial;background:#111;color:white;padding:40px"><h1>MONEYPULSE TEST PAGE</h1><p>Если ты видишь это — Dockerfile работает.</p></body></html>' > /usr/share/nginx/html/index.html
+COPY index.html /usr/share/nginx/html/index.html
+COPY auth.html /usr/share/nginx/html/auth.html
+COPY dashboard.html /usr/share/nginx/html/dashboard.html
+COPY insights.html /usr/share/nginx/html/insights.html
+COPY styles.css /usr/share/nginx/html/styles.css
+COPY script.js /usr/share/nginx/html/script.js
+COPY dashboard.js /usr/share/nginx/html/dashboard.js
+COPY supabase.js /usr/share/nginx/html/supabase.js
+COPY insights.js /usr/share/nginx/html/insights.js
 
 EXPOSE 80
