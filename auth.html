@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>MoneyPulse — вход</title>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page auth-page">
+    <nav class="nav">
+      <a class="brand brand-link" href="index.html">
+        <div class="brand-logo">M</div>
+
+        <div>
+          <div class="brand-title">MoneyPulse</div>
+          <div class="brand-subtitle">вернуться на главную</div>
+        </div>
+      </a>
+
+      <a class="add-btn" href="index.html">
+        Смотреть демо
+      </a>
+    </nav>
+
+    <section class="auth-layout">
+      <div class="auth-info">
+        <div class="badge">
+          🔐 Личный кабинет с Supabase Auth
+        </div>
+
+        <h1>
+          Твои расходы.
+          <span class="gradient-text">Только твои.</span>
+        </h1>
+
+        <p class="hero-text">
+          Создай аккаунт, добавляй реальные расходы и смотри аналитику по категориям,
+          неделям, месяцам и годам. Демо-страница останется открытой для примера,
+          а здесь будет твой личный кабинет.
+        </p>
+
+        <div class="auth-benefits">
+          <div class="benefit-card glass">
+            <div class="metric-icon">🧾</div>
+            <strong>Личные расходы</strong>
+            <span>каждый пользователь видит только свои записи</span>
+          </div>
+
+          <div class="benefit-card glass">
+            <div class="metric-icon">📊</div>
+            <strong>Аналитика</strong>
+            <span>категории, периоды, сумма, средний чек</span>
+          </div>
+
+          <div class="benefit-card glass">
+            <div class="metric-icon">⚡</div>
+            <strong>Быстрый вход</strong>
+            <span>регистрация и вход по email и паролю</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="auth-card glass">
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="loginTab" type="button">
+            Вход
+          </button>
+
+          <button class="auth-tab" id="registerTab" type="button">
+            Регистрация
+          </button>
+        </div>
+
+        <div class="auth-heading">
+          <h2 id="authTitle">Войти в аккаунт</h2>
+          <p id="authSubtitle">
+            Введи email и пароль, чтобы открыть личный кабинет.
+          </p>
+        </div>
+
+        <form class="auth-form" id="authForm">
+          <div class="field">
+            <label for="emailInput">Email</label>
+            <input
+              id="emailInput"
+              type="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="passwordInput">Пароль</label>
+            <input
+              id="passwordInput"
+              type="password"
+              placeholder="Минимум 6 символов"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+
+          <button class="save-btn" id="authSubmitBtn" type="submit">
+            Войти
+          </button>
+        </form>
+
+        <div class="auth-message" id="authMessage"></div>
+
+        <div class="auth-footer">
+          <p>
+            После входа ты автоматически попадёшь в личный кабинет.
+          </p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script>
+    const loginTab = document.getElementById("loginTab");
+    const registerTab = document.getElementById("registerTab");
+
+    const authTitle = document.getElementById("authTitle");
+    const authSubtitle = document.getElementById("authSubtitle");
+    const authForm = document.getElementById("authForm");
+    const authSubmitBtn = document.getElementById("authSubmitBtn");
+    const authMessage = document.getElementById("authMessage");
+
+    const emailInput = document.getElementById("emailInput");
+    const passwordInput = document.getElementById("passwordInput");
+
+    let authMode = "login";
+
+    function setAuthMode(mode) {
+      authMode = mode;
+      authMessage.textContent = "";
+      authMessage.className = "auth-message";
+
+      if (mode === "login") {
+        loginTab.classList.add("active");
+        registerTab.classList.remove("active");
+
+        authTitle.textContent = "Войти в аккаунт";
+        authSubtitle.textContent =
+          "Введи email и пароль, чтобы открыть личный кабинет.";
+        authSubmitBtn.textContent = "Войти";
+      }
+
+      if (mode === "register") {
+        registerTab.classList.add("active");
+        loginTab.classList.remove("active");
+
+        authTitle.textContent = "Создать аккаунт";
+        authSubtitle.textContent =
+          "Зарегистрируйся, чтобы сохранять свои расходы в Supabase.";
+        authSubmitBtn.textContent = "Создать аккаунт";
+      }
+    }
+
+    function showMessage(text, type = "info") {
+      authMessage.textContent = text;
+      authMessage.className = `auth-message ${type}`;
+    }
+
+    async function checkCurrentSession() {
+      const { data } = await supabaseClient.auth.getSession();
+
+      if (data.session) {
+        window.location.href = "dashboard.html";
+      }
+    }
+
+    loginTab.addEventListener("click", () => {
+      setAuthMode("login");
+    });
+
+    registerTab.addEventListener("click", () => {
+      setAuthMode("register");
+    });
+
+    authForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!email || !password) {
+        showMessage("Заполни email и пароль.", "error");
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage("Пароль должен быть минимум 6 символов.", "error");
+        return;
+      }
+
+      authSubmitBtn.disabled = true;
+      authSubmitBtn.textContent =
+        authMode === "login" ? "Входим..." : "Создаём аккаунт...";
+
+      try {
+        if (authMode === "login") {
+          const { error } = await supabaseClient.auth.signInWithPassword({
+            email,
+            password,
+          });
+
+          if (error) {
+            throw error;
+          }
+
+          window.location.href = "dashboard.html";
+        }
+
+        if (authMode === "register") {
+          const { data, error } = await supabaseClient.auth.signUp({
+            email,
+            password,
+          });
+
+          if (error) {
+            throw error;
+          }
+
+          if (data.session) {
+            window.location.href = "dashboard.html";
+          } else {
+            showMessage(
+              "Аккаунт создан. Проверь email и подтверди регистрацию, если Supabase попросит подтверждение.",
+              "success"
+            );
+          }
+        }
+      } catch (error) {
+        showMessage(error.message || "Ошибка авторизации.", "error");
+      } finally {
+        authSubmitBtn.disabled = false;
+        authSubmitBtn.textContent =
+          authMode === "login" ? "Войти" : "Создать аккаунт";
+      }
+    });
+
+    checkCurrentSession();
+  </script>
+</body>
+</html>

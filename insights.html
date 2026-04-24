@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>MoneyPulse — Pulse Insights</title>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page">
+    <nav class="nav">
+      <a class="brand brand-link" href="dashboard.html">
+        <div class="brand-logo">M</div>
+
+        <div>
+          <div class="brand-title">MoneyPulse</div>
+          <div class="brand-subtitle">Pulse Insights</div>
+        </div>
+      </a>
+
+      <div class="dashboard-actions">
+        <a class="logout-btn" href="dashboard.html">Кабинет</a>
+        <button class="logout-btn" id="logoutBtn">Выйти</button>
+      </div>
+    </nav>
+
+    <section class="insights-hero">
+      <div>
+        <div class="badge">
+          🧠 Pulse Insights — анализ денежных привычек
+        </div>
+
+        <h1>
+          Не просто расходы.
+          <span class="gradient-text">Твой финансовый характер.</span>
+        </h1>
+
+        <p class="hero-text">
+          Эта страница анализирует твои траты: в какие дни ты чаще тратишь деньги,
+          какая категория самая опасная, сколько уходит на импульсивные покупки,
+          какой прогноз до конца месяца и хватает ли бюджета.
+        </p>
+      </div>
+
+      <aside class="insight-budget-card glass">
+        <div class="summary-label">Бюджет месяца</div>
+
+        <div class="budget-main">
+          <div>
+            <div class="summary-total" id="budgetLeft">€0</div>
+            <div class="metric-note">останется по прогнозу</div>
+          </div>
+
+          <div class="budget-status" id="budgetStatus">—</div>
+        </div>
+
+        <div class="budget-track">
+          <div class="budget-fill" id="budgetFill"></div>
+        </div>
+
+        <div class="budget-grid">
+          <div>
+            <span>Бюджет</span>
+            <strong id="monthlyBudgetText">€0</strong>
+          </div>
+
+          <div>
+            <span>Потрачено</span>
+            <strong id="monthSpentText">€0</strong>
+          </div>
+
+          <div>
+            <span>Прогноз</span>
+            <strong id="forecastText">€0</strong>
+          </div>
+
+          <div>
+            <span>В день можно</span>
+            <strong id="dailyLimitText">€0</strong>
+          </div>
+        </div>
+
+        <form class="budget-form" id="budgetForm">
+          <input
+            id="budgetInput"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="Месячный бюджет, €"
+          />
+
+          <button type="submit">Сохранить</button>
+        </form>
+      </aside>
+    </section>
+
+    <section class="insight-grid">
+      <article class="insight-card glass">
+        <div class="insight-icon">📅</div>
+        <div class="insight-title">День риска</div>
+        <div class="insight-value" id="topWeekday">—</div>
+        <p id="topWeekdayText">Загружаем анализ...</p>
+      </article>
+
+      <article class="insight-card glass">
+        <div class="insight-icon">🔥</div>
+        <div class="insight-title">Самая опасная категория</div>
+        <div class="insight-value" id="dangerCategory">—</div>
+        <p id="dangerCategoryText">Загружаем анализ...</p>
+      </article>
+
+      <article class="insight-card glass">
+        <div class="insight-icon">⚡</div>
+        <div class="insight-title">Импульсивные расходы</div>
+        <div class="insight-value" id="impulseTotal">€0</div>
+        <p id="impulseText">Загружаем анализ...</p>
+      </article>
+
+      <article class="insight-card glass">
+        <div class="insight-icon">📈</div>
+        <div class="insight-title">Прогноз месяца</div>
+        <div class="insight-value" id="monthForecast">€0</div>
+        <p id="forecastDescription">Загружаем анализ...</p>
+      </article>
+    </section>
+
+    <section class="insight-layout">
+      <section class="panel glass">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Pulse Habits</div>
+            <div class="panel-subtitle">денежные привычки за текущий месяц</div>
+          </div>
+        </div>
+
+        <div class="habit-list" id="habitList"></div>
+      </section>
+
+      <section class="panel glass">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Самый дорогой день</div>
+            <div class="panel-subtitle">день месяца, где расходы были выше всего</div>
+          </div>
+        </div>
+
+        <div class="expensive-day" id="expensiveDayBlock">
+          <div class="empty-state">
+            <strong>Загружаем данные</strong>
+            <span>Сейчас посчитаем самый дорогой день.</span>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="insight-layout">
+      <section class="panel glass">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Повторяющиеся расходы</div>
+            <div class="panel-subtitle">подписки, аренда и регулярные платежи</div>
+          </div>
+
+          <button class="small-action-btn" id="openRecurringModalBtn">
+            + Добавить
+          </button>
+        </div>
+
+        <div class="recurring-list" id="recurringList"></div>
+      </section>
+
+      <section class="panel glass">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Финансовый совет</div>
+            <div class="panel-subtitle">автоматический вывод по твоим данным</div>
+          </div>
+        </div>
+
+        <div class="advice-card">
+          <div class="advice-icon">💡</div>
+          <div>
+            <strong id="adviceTitle">Загружаем совет...</strong>
+            <p id="adviceText">После анализа расходов здесь появится персональный вывод.</p>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="recurringModalBackdrop">
+    <form class="modal" id="recurringForm">
+      <div class="modal-head">
+        <div>
+          <h2>Регулярный расход</h2>
+          <p class="panel-subtitle">например: аренда, Spotify, телефон, интернет</p>
+        </div>
+
+        <button class="close-btn" type="button" id="closeRecurringModalBtn">
+          ×
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="recurringTitleInput">Название</label>
+          <input
+            id="recurringTitleInput"
+            type="text"
+            placeholder="Spotify"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="recurringAmountInput">Сумма, €</label>
+          <input
+            id="recurringAmountInput"
+            type="number"
+            min="0.01"
+            step="0.01"
+            placeholder="7.99"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="recurringCategoryInput">Категория</label>
+          <select id="recurringCategoryInput" required>
+            <option>Подписки</option>
+            <option>Дом</option>
+            <option>Транспорт</option>
+            <option>Еда</option>
+            <option>Кафе</option>
+            <option>Покупки</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="recurringDayInput">День списания</label>
+          <input
+            id="recurringDayInput"
+            type="number"
+            min="1"
+            max="31"
+            placeholder="1"
+            required
+          />
+        </div>
+      </div>
+
+      <button class="save-btn" type="submit" id="saveRecurringBtn">
+        Сохранить регулярный расход
+      </button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script src="insights.js"></script>
+</body>
+</html>

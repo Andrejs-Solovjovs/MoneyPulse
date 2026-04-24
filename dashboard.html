@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>MoneyPulse — личный кабинет</title>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page">
+    <nav class="nav">
+      <a class="brand brand-link" href="index.html">
+        <div class="brand-logo">M</div>
+
+        <div>
+          <div class="brand-title">MoneyPulse</div>
+          <div class="brand-subtitle" id="userEmail">личный кабинет</div>
+        </div>
+      </a>
+
+      <div class="dashboard-actions">
+        <a class="logout-btn" href="insights.html">
+            Pulse Insights
+        </a>
+
+        <button class="add-btn" id="openModalBtn">
+            + Добавить расход
+        </button>
+
+        <button class="logout-btn" id="logoutBtn">
+            Выйти
+        </button>
+        </div>
+    </nav>
+
+    <section class="dashboard-hero">
+      <div>
+        <div class="badge">
+          📊 Твои реальные расходы из Supabase
+        </div>
+
+        <h1>
+          Личный финансовый центр.
+          <span class="gradient-text">Без чужих данных.</span>
+        </h1>
+
+        <p class="hero-text">
+          Здесь отображаются только твои расходы. Добавляй траты, фильтруй по времени,
+          смотри категории и находи главные денежные утечки.
+        </p>
+      </div>
+
+      <aside class="summary-card glass">
+        <div class="summary-inner">
+          <div class="summary-top">
+            <div>
+              <div class="summary-label">Расходы за период</div>
+              <div class="summary-total" id="summaryTotal">€0</div>
+            </div>
+
+            <div class="trend">Live data</div>
+          </div>
+
+          <div id="summaryBars"></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="metrics">
+      <article class="metric-card glass">
+        <div class="metric-icon">↘</div>
+        <div class="metric-title">Всего трат</div>
+        <div class="metric-value" id="metricTotal">€0</div>
+        <div class="metric-note">за выбранный период</div>
+      </article>
+
+      <article class="metric-card glass">
+        <div class="metric-icon">〽</div>
+        <div class="metric-title">Средний чек</div>
+        <div class="metric-value" id="metricAverage">€0</div>
+        <div class="metric-note">на одну операцию</div>
+      </article>
+
+      <article class="metric-card glass">
+        <div class="metric-icon">▦</div>
+        <div class="metric-title">Операций</div>
+        <div class="metric-value" id="metricCount">0</div>
+        <div class="metric-note">найдено в истории</div>
+      </article>
+
+      <article class="metric-card glass">
+        <div class="metric-icon">🔥</div>
+        <div class="metric-title">Самая большая</div>
+        <div class="metric-value" id="metricBiggest">€0</div>
+        <div class="metric-note" id="metricBiggestNote">нет данных</div>
+      </article>
+    </section>
+
+    <section class="dashboard">
+      <aside class="panel glass">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Категории</div>
+            <div class="panel-subtitle">твоя структура расходов</div>
+          </div>
+
+          <div class="panel-arrow">↗</div>
+        </div>
+
+        <div class="category-list" id="categoryList"></div>
+      </aside>
+
+      <section class="panel glass">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Мои расходы</div>
+            <div class="panel-subtitle">поиск, категории и сортировка по времени</div>
+          </div>
+
+          <div class="periods" id="periodButtons"></div>
+        </div>
+
+        <div class="toolbar">
+          <label class="search-wrap">
+            <span>⌕</span>
+            <input id="searchInput" type="text" placeholder="Найти расход..." />
+          </label>
+        </div>
+
+        <div class="chips" id="categoryChips"></div>
+
+        <div class="expense-list" id="expenseList"></div>
+      </section>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <form class="modal" id="expenseForm">
+      <div class="modal-head">
+        <div>
+          <h2>Новый расход</h2>
+          <p class="panel-subtitle">эта операция сохранится в твоём аккаунте</p>
+        </div>
+
+        <button class="close-btn" type="button" id="closeModalBtn">
+          ×
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="titleInput">Название</label>
+          <input
+            id="titleInput"
+            type="text"
+            placeholder="Например: Rimi — продукты"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="amountInput">Сумма, €</label>
+          <input
+            id="amountInput"
+            type="number"
+            min="0.01"
+            step="0.01"
+            placeholder="24.99"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="categoryInput">Категория</label>
+          <select id="categoryInput" required>
+            <option>Еда</option>
+            <option>Транспорт</option>
+            <option>Кафе</option>
+            <option>Дом</option>
+            <option>Покупки</option>
+            <option>Подписки</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="dateInput">Дата</label>
+          <input id="dateInput" type="date" required />
+        </div>
+
+        <div class="field">
+          <label for="moodInput">Тип траты</label>
+          <select id="moodInput" required>
+            <option>База</option>
+            <option>Импульс</option>
+            <option>Ритуал</option>
+            <option>Обязательное</option>
+            <option>Хочу</option>
+            <option>Авто</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="save-btn" type="submit" id="saveExpenseBtn">
+        Сохранить расход
+      </button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
