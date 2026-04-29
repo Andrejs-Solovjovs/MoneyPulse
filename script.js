@@ -1,10 +1,16 @@
+function getDemoDate(daysAgo) {
+  const date = new Date();
+  date.setDate(date.getDate() - daysAgo);
+  return date.toISOString().slice(0, 10);
+}
+
 const expenses = [
   {
     id: 1,
     title: "Rimi — продукты",
     category: "Еда",
     amount: 42.8,
-    date: "2026-04-23",
+    date: getDemoDate(1),
     mood: "База",
   },
   {
@@ -12,7 +18,7 @@ const expenses = [
     title: "Bolt до центра",
     category: "Транспорт",
     amount: 11.4,
-    date: "2026-04-22",
+    date: getDemoDate(2),
     mood: "Импульс",
   },
   {
@@ -20,7 +26,7 @@ const expenses = [
     title: "Кофе и булочка",
     category: "Кафе",
     amount: 6.7,
-    date: "2026-04-21",
+    date: getDemoDate(3),
     mood: "Ритуал",
   },
   {
@@ -28,7 +34,7 @@ const expenses = [
     title: "Аренда комнаты",
     category: "Дом",
     amount: 390,
-    date: "2026-04-01",
+    date: getDemoDate(4),
     mood: "Обязательное",
   },
   {
@@ -36,7 +42,7 @@ const expenses = [
     title: "H&M футболка",
     category: "Покупки",
     amount: 24.99,
-    date: "2026-04-18",
+    date: getDemoDate(5),
     mood: "Хочу",
   },
   {
@@ -44,7 +50,7 @@ const expenses = [
     title: "Подписка Spotify",
     category: "Подписки",
     amount: 7.99,
-    date: "2026-04-12",
+    date: getDemoDate(8),
     mood: "Авто",
   },
   {
@@ -52,7 +58,7 @@ const expenses = [
     title: "Обед в университете",
     category: "Еда",
     amount: 8.5,
-    date: "2026-04-17",
+    date: getDemoDate(10),
     mood: "База",
   },
   {
@@ -60,7 +66,7 @@ const expenses = [
     title: "Такси ночью",
     category: "Транспорт",
     amount: 18.2,
-    date: "2026-04-14",
+    date: getDemoDate(12),
     mood: "Импульс",
   },
 ];
