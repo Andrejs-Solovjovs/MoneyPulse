@@ -401,20 +401,168 @@ function renderExpenses(filteredExpenses) {
     expenseList.appendChild(card);
   });
 }
+function setMetricIcon(element, icon, state = "normal") {
+  if (!element) return;
+
+  element.className = "metric-icon dynamic";
+
+  if (state === "pulse") {
+    element.classList.add("pulse");
+  }
+
+  if (state === "danger") {
+    element.classList.add("pulse", "danger");
+  }
+
+  element.innerHTML = icon;
+}
+
+function getTotalIconState(total) {
+  if (total === 0) {
+    return {
+      icon: appIcons.wallet || "↘",
+      state: "normal",
+    };
+  }
+
+  if (total < 100) {
+    return {
+      icon: appIcons.handCoins || "↘",
+      state: "normal",
+    };
+  }
+
+  if (total < 500) {
+    return {
+      icon: appIcons.creditCard || "↘",
+      state: "normal",
+    };
+  }
+
+  if (total < 1000) {
+    return {
+      icon: appIcons.banknoteUp || "↘",
+      state: "pulse",
+    };
+  }
+
+  return {
+    icon: appIcons.bellElectric || "↘",
+    state: "danger",
+  };
+}
+
+function getAverageIconState(average) {
+  if (average === 0) {
+    return {
+      icon: appIcons.circleSlash || "〽",
+      state: "normal",
+    };
+  }
+
+  if (average < 10) {
+    return {
+      icon: appIcons.receipt || "〽",
+      state: "normal",
+    };
+  }
+
+  if (average < 50) {
+    return {
+      icon: appIcons.chartColumns || "〽",
+      state: "normal",
+    };
+  }
+
+  if (average < 150) {
+    return {
+      icon: appIcons.trendingUp || "〽",
+      state: "pulse",
+    };
+  }
+
+  return {
+    icon: appIcons.triangleAlert || "〽",
+    state: "danger",
+  };
+}
+
+function getCountIconState(count) {
+  if (count === 0) {
+    return {
+      icon: appIcons.calendarX || "▦",
+      state: "normal",
+    };
+  }
+
+  if (count <= 3) {
+    return {
+      icon: appIcons.list || "▦",
+      state: "normal",
+    };
+  }
+
+  if (count <= 10) {
+    return {
+      icon: appIcons.scrollText || "▦",
+      state: "normal",
+    };
+  }
+
+  if (count <= 25) {
+    return {
+      icon: appIcons.squareActivity || "▦",
+      state: "pulse",
+    };
+  }
+
+  return {
+    icon: appIcons.gauge || "▦",
+    state: "danger",
+  };
+}
+
+function getBiggestIconState(biggest) {
+  if (!biggest) {
+    return {
+      icon: appIcons.bellElectric || "🔥",
+      state: "normal",
+    };
+  }
+
+  const settings = categorySettings[biggest.category];
+
+  return {
+    icon: settings ? settings.icon : appIcons.bellElectric || "🔥",
+    state: "pulse",
+  };
+}
 
 function renderMetrics(filteredExpenses, total) {
   const average =
     filteredExpenses.length > 0 ? total / filteredExpenses.length : 0;
 
-  const biggest = [...filteredExpenses].sort((a, b) => b.amount - a.amount)[0];
+  const biggest = [...filteredExpenses].sort((a, b) => {
+    return Number(b.amount) - Number(a.amount);
+  })[0];
 
   summaryTotal.textContent = formatMoney(total);
   metricTotal.textContent = formatMoney(total);
   metricAverage.textContent = formatMoney(average);
   metricCount.textContent = filteredExpenses.length;
 
+  const totalIconState = getTotalIconState(total);
+  const averageIconState = getAverageIconState(average);
+  const countIconState = getCountIconState(filteredExpenses.length);
+  const biggestIconState = getBiggestIconState(biggest);
+
+  setMetricIcon(metricTotalIcon, totalIconState.icon, totalIconState.state);
+  setMetricIcon(metricAverageIcon, averageIconState.icon, averageIconState.state);
+  setMetricIcon(metricCountIcon, countIconState.icon, countIconState.state);
+  setMetricIcon(metricBiggestIcon, biggestIconState.icon, biggestIconState.state);
+
   if (biggest) {
-    metricBiggest.textContent = formatMoney(biggest.amount);
+    metricBiggest.textContent = formatMoney(Number(biggest.amount));
     metricBiggestNote.textContent = biggest.category;
   } else {
     metricBiggest.textContent = formatMoney(0);
