@@ -1385,29 +1385,30 @@ a.add-btn {
   }
 }
 .app-icon {
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   display: block;
 }
 
-.expense-icon .app-icon,
+.category-icon,
+.expense-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  flex: 0 0 auto;
+}
+
+.category-icon .app-icon,
+.expense-icon .app-icon {
+  width: 18px;
+  height: 18px;
+}
+
 .metric-icon .app-icon,
 .habit-emoji .app-icon,
 .recurring-emoji .app-icon {
-  width: 24px;
-  height: 24px;
-}
-
-.category-icon {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 56px;
-  height: 56px;
-  border-radius: 20px;
-}
-
-.category-icon .app-icon {
-  width: 25px;
-  height: 25px;
+  width: 16px;
+  height: 16px;
 }
