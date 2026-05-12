@@ -75,37 +75,37 @@ const periods = ["Неделя", "Месяц", "Квартал", "Год"];
 
 const categorySettings = {
   Еда: {
-    icon: "🍽️",
+    icon: icons.food,
     colorClass: "color-food",
     softClass: "soft-food",
     barClass: "bar-food",
   },
   Транспорт: {
-    icon: "🚕",
+    icon: icons.transport,
     colorClass: "color-transport",
     softClass: "soft-transport",
     barClass: "bar-transport",
   },
   Кафе: {
-    icon: "☕",
+    icon: icons.cafe,
     colorClass: "color-cafe",
     softClass: "soft-cafe",
     barClass: "bar-cafe",
   },
   Дом: {
-    icon: "🏠",
+    icon: icons.home,
     colorClass: "color-home",
     softClass: "soft-home",
     barClass: "bar-home",
   },
   Покупки: {
-    icon: "🛍️",
+    icon: icons.shopping,
     colorClass: "color-shopping",
     softClass: "soft-shopping",
     barClass: "bar-shopping",
   },
   Подписки: {
-    icon: "💳",
+    icon: icons.subscriptions,
     colorClass: "color-subscriptions",
     softClass: "soft-subscriptions",
     barClass: "bar-subscriptions",
