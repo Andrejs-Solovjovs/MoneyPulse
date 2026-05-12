@@ -1459,3 +1459,35 @@ a.add-btn {
     box-shadow: 0 0 28px rgba(248, 113, 113, 0.35);
   }
 }
+.insight-icon .app-icon,
+.advice-icon .app-icon,
+.habit-emoji .app-icon,
+.recurring-emoji .app-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.insight-icon.good,
+.advice-icon.good {
+  color: #86efac;
+  background: rgba(110, 231, 183, 0.13);
+}
+
+.insight-icon.pulse,
+.advice-icon.pulse {
+  color: #fde68a;
+  background: rgba(245, 158, 11, 0.14);
+  animation: metricPulse 1.8s ease-in-out infinite;
+}
+
+.insight-icon.danger,
+.advice-icon.danger {
+  color: #fca5a5;
+  background: rgba(248, 113, 113, 0.14);
+  animation: metricDangerPulse 1.25s ease-in-out infinite;
+}
+
+.budget-icon {
+  margin-top: 18px;
+  margin-bottom: 14px;
+}
