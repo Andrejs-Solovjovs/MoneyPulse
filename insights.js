@@ -547,22 +547,56 @@ function renderHabits(monthExpenses, monthSpent, forecast) {
 
   const habits = [
     {
-      emoji: "📌",
+      icon: appIcons.habitBrain,
+      state: "normal",
       title: "Всего расходов за месяц",
       text: `Ты уже потратил ${formatMoney(monthSpent)} в этом месяце.`,
     },
     {
-      emoji: "⚡",
+      icon:
+        impulseExpenses.length >= 3
+          ? appIcons.impulseMedium
+          : impulseExpenses.length > 0
+            ? appIcons.impulseLow
+            : appIcons.impulseZero,
+      state:
+        impulseExpenses.length >= 3
+          ? "pulse"
+          : impulseExpenses.length > 0
+            ? "normal"
+            : "good",
       title: "Импульсивные покупки",
       text: `Количество импульсивных покупок: ${impulseExpenses.length}.`,
     },
     {
-      emoji: "🔁",
+      icon:
+        recurringExpenses.length === 0
+          ? appIcons.recurringEmpty
+          : recurringExpenses.length >= 3
+            ? appIcons.recurringMany
+            : appIcons.recurringNormal,
+      state:
+        recurringExpenses.length === 0
+          ? "normal"
+          : recurringExpenses.length >= 3
+            ? "pulse"
+            : "good",
       title: "Регулярные платежи",
       text: `Фиксированные расходы месяца: ${formatMoney(recurringTotal)}.`,
     },
     {
-      emoji: "📈",
+      icon:
+        monthlyBudget && forecast > monthlyBudget
+          ? appIcons.forecastOverBudget
+          : monthSpent > 0
+            ? appIcons.forecastGrowing
+            : appIcons.forecastEmpty,
+      state:
+        monthlyBudget && forecast > monthlyBudget
+          ? "danger"
+          : monthSpent > 0
+            ? "pulse"
+            : "normal",
       title: "Прогноз",
       text: `Текущий прогноз до конца месяца: ${formatMoney(forecast)}.`,
     },
@@ -572,7 +606,10 @@ function renderHabits(monthExpenses, monthSpent, forecast) {
     .map((habit) => {
       return `
         <div class="habit-item">
-          <div class="habit-emoji">${habit.emoji}</div>
+          <div class="habit-emoji ${habit.state}">
+            ${habit.icon || ""}
+          </div>
+
           <div>
             <strong>${habit.title}</strong>
             <span>${habit.text}</span>
@@ -587,6 +624,9 @@ function renderRecurringExpenses() {
   if (!recurringExpenses.length) {
     recurringList.innerHTML = `
       <div class="empty-state">
+        <div class="empty-icon">
+          ${appIcons.recurringEmpty || ""}
+        </div>
         <strong>Регулярных расходов пока нет</strong>
         <span>Добавь аренду, подписки, телефон или интернет.</span>
       </div>
@@ -596,9 +636,26 @@ function renderRecurringExpenses() {
 
   recurringList.innerHTML = recurringExpenses
     .map((item) => {
+      const amount = Number(item.amount || 0);
+
+      let icon = appIcons.recurringNormal;
+      let state = "good";
+
+      if (recurringExpenses.length >= 3) {
+        icon = appIcons.recurringMany;
+        state = "pulse";
+      }
+
+      if (amount >= 100) {
+        icon = appIcons.recurringHigh;
+        state = "danger";
+      }
+
       return `
         <div class="recurring-item">
-          <div class="recurring-emoji">🔁</div>
+          <div class="recurring-emoji ${state}">
+            ${icon || ""}
+          </div>
 
           <div>
             <strong>${escapeHtml(item.title)}</strong>
