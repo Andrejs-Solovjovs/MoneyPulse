@@ -1384,3 +1384,30 @@ a.add-btn {
     text-align: left;
   }
 }
+.app-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.expense-icon .app-icon,
+.metric-icon .app-icon,
+.habit-emoji .app-icon,
+.recurring-emoji .app-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.category-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 20px;
+}
+
+.category-icon .app-icon {
+  width: 25px;
+  height: 25px;
+}
