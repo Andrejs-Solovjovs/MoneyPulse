@@ -11,5 +11,7 @@ COPY script.js /usr/share/nginx/html/script.js
 COPY dashboard.js /usr/share/nginx/html/dashboard.js
 COPY supabase.js /usr/share/nginx/html/supabase.js
 COPY insights.js /usr/share/nginx/html/insights.js
+COPY icons.js /usr/share/nginx/html/icons.js
+
 
 EXPOSE 80
