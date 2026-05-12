@@ -280,7 +280,9 @@ function renderCategoryList(categoriesData) {
 
     button.innerHTML = `
       <div class="category-card-inner">
-        <div class="category-dot ${settings.colorClass}"></div>
+        <div class="category-icon ${settings.softClass}">
+          ${settings.icon}
+        </div>
 
         <div class="category-main">
           <div class="category-top">
