@@ -73,39 +73,45 @@ const expenses = [
 
 const periods = ["Неделя", "Месяц", "Квартал", "Год"];
 
+if (!window.icons) {
+  throw new Error("icons.js не загружен. Подключи icons.js перед script.js");
+}
+
+const appIcons = window.icons;
+
 const categorySettings = {
   Еда: {
-    icon: window.icons.food,
+    icon: appIcons.food,
     colorClass: "color-food",
     softClass: "soft-food",
     barClass: "bar-food",
   },
   Транспорт: {
-    icon: icons.transport,
+    icon: appIcons.transport,
     colorClass: "color-transport",
     softClass: "soft-transport",
     barClass: "bar-transport",
   },
   Кафе: {
-    icon: icons.cafe,
+    icon: appIcons.cafe,
     colorClass: "color-cafe",
     softClass: "soft-cafe",
     barClass: "bar-cafe",
   },
   Дом: {
-    icon: icons.home,
+    icon: appIcons.home,
     colorClass: "color-home",
     softClass: "soft-home",
     barClass: "bar-home",
   },
   Покупки: {
-    icon: icons.shopping,
+    icon: appIcons.shopping,
     colorClass: "color-shopping",
     softClass: "soft-shopping",
     barClass: "bar-shopping",
   },
   Подписки: {
-    icon: icons.subscriptions,
+    icon: appIcons.subscriptions,
     colorClass: "color-subscriptions",
     softClass: "soft-subscriptions",
     barClass: "bar-subscriptions",
