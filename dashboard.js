@@ -5,7 +5,7 @@ const periods = ["Неделя", "Месяц", "Квартал", "Год"];
 
 const categorySettings = {
   Еда: {
-    icon: icons.food,
+    icon: window.icons.food,
     colorClass: "color-food",
     softClass: "soft-food",
     barClass: "bar-food",
