@@ -1491,3 +1491,40 @@ a.add-btn {
   margin-top: 18px;
   margin-bottom: 14px;
 }
+.habit-emoji .app-icon,
+.recurring-emoji .app-icon,
+.empty-icon .app-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.habit-emoji.good,
+.recurring-emoji.good {
+  color: #86efac;
+  background: rgba(110, 231, 183, 0.13);
+}
+
+.habit-emoji.pulse,
+.recurring-emoji.pulse {
+  color: #fde68a;
+  background: rgba(245, 158, 11, 0.14);
+  animation: metricPulse 1.8s ease-in-out infinite;
+}
+
+.habit-emoji.danger,
+.recurring-emoji.danger {
+  color: #fca5a5;
+  background: rgba(248, 113, 113, 0.14);
+  animation: metricDangerPulse 1.25s ease-in-out infinite;
+}
+
+.empty-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
+  border-radius: 18px;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.08);
+}
