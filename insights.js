@@ -13,6 +13,15 @@ const monthSpentText = document.getElementById("monthSpentText");
 const forecastText = document.getElementById("forecastText");
 const dailyLimitText = document.getElementById("dailyLimitText");
 
+const appIcons = window.icons || {};
+
+const budgetIcon = document.getElementById("budgetIcon");
+const topWeekdayIcon = document.getElementById("topWeekdayIcon");
+const dangerCategoryIcon = document.getElementById("dangerCategoryIcon");
+const impulseIcon = document.getElementById("impulseIcon");
+const forecastIcon = document.getElementById("forecastIcon");
+const adviceIcon = document.getElementById("adviceIcon");
+
 const budgetForm = document.getElementById("budgetForm");
 const budgetInput = document.getElementById("budgetInput");
 
@@ -61,6 +70,195 @@ function formatMoney(value) {
     style: "currency",
     currency: "EUR",
   }).format(Number(value || 0));
+}
+
+function setInsightIcon(element, icon, state = "normal") {
+  if (!element) return;
+
+  element.classList.remove("pulse", "danger", "good");
+
+  if (state === "pulse") {
+    element.classList.add("pulse");
+  }
+
+  if (state === "danger") {
+    element.classList.add("danger");
+  }
+
+  if (state === "good") {
+    element.classList.add("good");
+  }
+
+  element.innerHTML = icon || "";
+}
+
+function getCategoryIcon(category) {
+  const map = {
+    Еда: appIcons.food,
+    Транспорт: appIcons.transport,
+    Кафе: appIcons.cafe,
+    Дом: appIcons.home,
+    Покупки: appIcons.shopping,
+    Подписки: appIcons.subscriptions,
+  };
+
+  return map[category] || appIcons.budgetRisk || "";
+}
+
+function renderBudgetIcon(monthSpent, forecast) {
+  const budget = Number(monthlyBudget || 0);
+
+  if (!budget) {
+    setInsightIcon(budgetIcon, appIcons.budgetUnset, "normal");
+    return;
+  }
+
+  const usedPercent = monthSpent / budget;
+  const forecastPercent = forecast / budget;
+
+  if (monthSpent > budget || forecastPercent > 1.15) {
+    setInsightIcon(budgetIcon, appIcons.budgetOver, "danger");
+    return;
+  }
+
+  if (forecastPercent > 1) {
+    setInsightIcon(budgetIcon, appIcons.budgetRisk, "danger");
+    return;
+  }
+
+  if (usedPercent >= 0.8) {
+    setInsightIcon(budgetIcon, appIcons.budgetNearLimit, "pulse");
+    return;
+  }
+
+  setInsightIcon(budgetIcon, appIcons.budgetGood, "good");
+}
+
+function renderTopWeekdayIcon(monthExpenses) {
+  if (!monthExpenses.length) {
+    setInsightIcon(topWeekdayIcon, appIcons.riskDayEmpty, "normal");
+    return;
+  }
+
+  const map = {};
+
+  monthExpenses.forEach((expense) => {
+    const day = new Date(expense.expense_date).getDay();
+
+    if (!map[day]) {
+      map[day] = {
+        count: 0,
+        total: 0,
+      };
+    }
+
+    map[day].count += 1;
+    map[day].total += Number(expense.amount || 0);
+  });
+
+  const top = Object.values(map).sort((a, b) => b.count - a.count)[0];
+
+  if (top.total >= 150) {
+    setInsightIcon(topWeekdayIcon, appIcons.riskDayExpensive, "danger");
+    return;
+  }
+
+  if (top.count >= 3) {
+    setInsightIcon(topWeekdayIcon, appIcons.riskDayFrequent, "pulse");
+    return;
+  }
+
+  setInsightIcon(topWeekdayIcon, appIcons.riskDayNormal, "normal");
+}
+
+function renderDangerCategoryIcon(monthExpenses) {
+  if (!monthExpenses.length) {
+    setInsightIcon(dangerCategoryIcon, appIcons.budgetRisk, "normal");
+    return;
+  }
+
+  const categoryMap = {};
+
+  monthExpenses.forEach((expense) => {
+    if (!categoryMap[expense.category]) {
+      categoryMap[expense.category] = 0;
+    }
+
+    categoryMap[expense.category] += Number(expense.amount || 0);
+  });
+
+  const [category, value] = Object.entries(categoryMap).sort((a, b) => {
+    return b[1] - a[1];
+  })[0];
+
+  const total = getMonthTotal(monthExpenses);
+  const percent = total > 0 ? value / total : 0;
+
+  if (percent >= 0.45) {
+    setInsightIcon(dangerCategoryIcon, getCategoryIcon(category), "danger");
+    return;
+  }
+
+  setInsightIcon(dangerCategoryIcon, getCategoryIcon(category), "pulse");
+}
+
+function renderImpulseIcon(monthExpenses) {
+  const impulses = monthExpenses.filter((expense) => {
+    return String(expense.mood || "").toLowerCase() === "импульс";
+  });
+
+  const count = impulses.length;
+
+  if (count === 0) {
+    setInsightIcon(impulseIcon, appIcons.impulseZero, "good");
+    return;
+  }
+
+  if (count <= 2) {
+    setInsightIcon(impulseIcon, appIcons.impulseLow, "normal");
+    return;
+  }
+
+  if (count <= 5) {
+    setInsightIcon(impulseIcon, appIcons.impulseMedium, "pulse");
+    return;
+  }
+
+  setInsightIcon(impulseIcon, appIcons.impulseHigh, "danger");
+}
+
+function renderForecastIcon(monthSpent, forecast) {
+  const budget = Number(monthlyBudget || 0);
+
+  if (!monthSpent) {
+    setInsightIcon(forecastIcon, appIcons.forecastEmpty, "normal");
+    return;
+  }
+
+  if (budget && forecast > budget * 1.2) {
+    setInsightIcon(forecastIcon, appIcons.forecastDanger, "danger");
+    return;
+  }
+
+  if (budget && forecast > budget) {
+    setInsightIcon(forecastIcon, appIcons.forecastOverBudget, "danger");
+    return;
+  }
+
+  if (forecast > monthSpent) {
+    setInsightIcon(forecastIcon, appIcons.forecastGrowing, "pulse");
+    return;
+  }
+
+  setInsightIcon(forecastIcon, appIcons.forecastNormal, "good");
+}
+
+function renderAllInsightIcons(monthExpenses, monthSpent, forecast) {
+  renderBudgetIcon(monthSpent, forecast);
+  renderTopWeekdayIcon(monthExpenses);
+  renderDangerCategoryIcon(monthExpenses);
+  renderImpulseIcon(monthExpenses);
+  renderForecastIcon(monthSpent, forecast);
 }
 
 function escapeHtml(text) {
@@ -427,6 +625,8 @@ function renderRecurringExpenses() {
 
 function renderAdvice(monthExpenses, monthSpent, forecast) {
   if (!monthExpenses.length) {
+    setInsightIcon(adviceIcon, appIcons.adviceDefault, "normal");
+
     adviceTitle.textContent = "Добавь первые расходы";
     adviceText.textContent =
       "После нескольких операций MoneyPulse сможет показать реальные финансовые привычки.";
@@ -434,6 +634,8 @@ function renderAdvice(monthExpenses, monthSpent, forecast) {
   }
 
   if (monthlyBudget && forecast > monthlyBudget) {
+    setInsightIcon(adviceIcon, appIcons.adviceWarning, "danger");
+
     adviceTitle.textContent = "Есть риск выйти за бюджет";
     adviceText.textContent =
       "Попробуй временно сократить импульсивные покупки и кафе. Так проще удержаться в месячном лимите.";
@@ -445,11 +647,15 @@ function renderAdvice(monthExpenses, monthSpent, forecast) {
   });
 
   if (impulseExpenses.length >= 3) {
+    setInsightIcon(adviceIcon, appIcons.adviceSaving, "pulse");
+
     adviceTitle.textContent = "Импульсивные траты заметны";
     adviceText.textContent =
       "Перед небольшими покупками попробуй правило 24 часов: если завтра всё ещё нужно — покупай.";
     return;
   }
+
+  setInsightIcon(adviceIcon, appIcons.adviceGood, "good");
 
   adviceTitle.textContent = "Финансовый темп выглядит нормально";
   adviceText.textContent =
@@ -461,6 +667,8 @@ function renderInsights() {
   const monthSpent = getMonthTotal(monthExpenses);
   const forecast = calculateForecast(monthSpent);
 
+  renderAllInsightIcons(monthExpenses, monthSpent, forecast);
+  
   renderBudget(monthSpent, forecast);
   renderTopWeekday(monthExpenses);
   renderDangerCategory(monthExpenses);
@@ -470,6 +678,7 @@ function renderInsights() {
   renderHabits(monthExpenses, monthSpent, forecast);
   renderRecurringExpenses();
   renderAdvice(monthExpenses, monthSpent, forecast);
+  
 }
 
 async function saveBudget(value) {
