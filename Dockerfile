@@ -13,5 +13,7 @@ COPY supabase.js /usr/share/nginx/html/supabase.js
 COPY insights.js /usr/share/nginx/html/insights.js
 COPY icons.js /usr/share/nginx/html/icons.js
 
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 
 EXPOSE 80
