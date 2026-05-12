@@ -46,6 +46,7 @@
 
       <aside class="insight-budget-card glass">
         <div class="summary-label">Бюджет месяца</div>
+        <div class="insight-icon budget-icon" id="budgetIcon"></div>
 
         <div class="budget-main">
           <div>
@@ -98,28 +99,28 @@
 
     <section class="insight-grid">
       <article class="insight-card glass">
-        <div class="insight-icon">📅</div>
+        <div class="insight-icon" id="topWeekdayIcon"></div>
         <div class="insight-title">День риска</div>
         <div class="insight-value" id="topWeekday">—</div>
         <p id="topWeekdayText">Загружаем анализ...</p>
       </article>
 
       <article class="insight-card glass">
-        <div class="insight-icon">🔥</div>
+        <div class="insight-icon" id="dangerCategoryIcon"></div>
         <div class="insight-title">Самая опасная категория</div>
         <div class="insight-value" id="dangerCategory">—</div>
         <p id="dangerCategoryText">Загружаем анализ...</p>
       </article>
 
       <article class="insight-card glass">
-        <div class="insight-icon">⚡</div>
+        <div class="insight-icon" id="impulseIcon"></div>
         <div class="insight-title">Импульсивные расходы</div>
         <div class="insight-value" id="impulseTotal">€0</div>
         <p id="impulseText">Загружаем анализ...</p>
       </article>
 
       <article class="insight-card glass">
-        <div class="insight-icon">📈</div>
+        <div class="insight-icon" id="forecastIcon"></div>
         <div class="insight-title">Прогноз месяца</div>
         <div class="insight-value" id="monthForecast">€0</div>
         <p id="forecastDescription">Загружаем анализ...</p>
@@ -180,7 +181,7 @@
         </div>
 
         <div class="advice-card">
-          <div class="advice-icon">💡</div>
+          <div class="advice-icon" id="adviceIcon"></div>
           <div>
             <strong id="adviceTitle">Загружаем совет...</strong>
             <p id="adviceText">После анализа расходов здесь появится персональный вывод.</p>
