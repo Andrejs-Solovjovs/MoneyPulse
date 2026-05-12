@@ -56,6 +56,10 @@ const metricAverage = document.getElementById("metricAverage");
 const metricCount = document.getElementById("metricCount");
 const metricBiggest = document.getElementById("metricBiggest");
 const metricBiggestNote = document.getElementById("metricBiggestNote");
+const metricTotalIcon = document.getElementById("metricTotalIcon");
+const metricAverageIcon = document.getElementById("metricAverageIcon");
+const metricCountIcon = document.getElementById("metricCountIcon");
+const metricBiggestIcon = document.getElementById("metricBiggestIcon");
 
 const categoryList = document.getElementById("categoryList");
 const categoryChips = document.getElementById("categoryChips");
