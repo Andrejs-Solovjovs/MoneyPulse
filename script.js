@@ -443,36 +443,47 @@ function closeModal() {
   expenseForm.reset();
 }
 
-searchInput.addEventListener("input", (event) => {
-  searchQuery = event.target.value;
-  renderApp();
-});
+if (searchInput) {
+  searchInput.addEventListener("input", (event) => {
+    searchQuery = event.target.value;
+    renderApp();
+  });
+}
 
-openModalBtn.addEventListener("click", openModal);
-closeModalBtn.addEventListener("click", closeModal);
+if (openModalBtn) {
+  openModalBtn.addEventListener("click", openModal);
+}
 
-modalBackdrop.addEventListener("click", (event) => {
-  if (event.target === modalBackdrop) {
+if (closeModalBtn) {
+  closeModalBtn.addEventListener("click", closeModal);
+}
+
+if (modalBackdrop) {
+  modalBackdrop.addEventListener("click", (event) => {
+    if (event.target === modalBackdrop) {
+      closeModal();
+    }
+  });
+}
+
+if (expenseForm) {
+  expenseForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const newExpense = {
+      id: Date.now(),
+      title: titleInput.value.trim(),
+      amount: Number(amountInput.value),
+      category: categoryInput.value,
+      date: dateInput.value,
+      mood: moodInput.value,
+    };
+
+    expenses.unshift(newExpense);
+
     closeModal();
-  }
-});
-
-expenseForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const newExpense = {
-    id: Date.now(),
-    title: titleInput.value.trim(),
-    amount: Number(amountInput.value),
-    category: categoryInput.value,
-    date: dateInput.value,
-    mood: moodInput.value,
-  };
-
-  expenses.unshift(newExpense);
-
-  closeModal();
-  renderApp();
-});
+    renderApp();
+  });
+}
 
 renderApp();
